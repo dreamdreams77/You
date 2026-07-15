@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dreams — Laura Johnston</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=EB+Garamond:ital@0;1&display=swap');
+
+  :root{
+    --sky-deep:#0a1626;
+    --sky-mid:#0f2038;
+    --sea-deep:#0c1e33;
+    --sea-mid:#153453;
+    --sea-light:#265277;
+    --moon:#f3ecd9;
+    --moon-glow:rgba(243,236,217,0.35);
+    --silver:#dbe6ee;
+    --gold:#e8cf9a;
+    --panel-bg:rgba(8,16,28,0.42);
+    --panel-border:rgba(219,230,238,0.14);
+  }
+
+  *{box-sizing:border-box;}
+  html,body{
+    margin:0; padding:0; height:100%;
+    background:var(--sky-deep);
+    overflow-x:hidden;
+    font-family:'EB Garamond', serif;
+  }
+
+  /* ---------- SCENE ---------- */
+  .scene{
+    position:fixed; inset:0;
+    background:
+      radial-gradient(ellipse at 78% 18%, rgba(243,236,217,0.10) 0%, rgba(243,236,217,0) 32%),
+      linear-gradient(to bottom, var(--sky-deep) 0%, var(--sky-mid) 42%, var(--sea-mid) 58%, var(--sea-deep) 100%);
+    z-index:0;
+  }
+
+  .stars{
+    position:absolute; inset:0 0 55% 0;
+    background-image:
+      radial-gradient(1.5px 1.5px at 12% 20%, rgba(255,255,255,0.8), transparent),
+      radial-gradient(1px 1px at 25% 10%, rgba(255,255,255,0.6), transparent),
+      radial-gradient(1.5px 1.5px at 40% 30%, rgba(255,255,255,0.7), transparent),
+      radial-gradient(1px 1px at 55% 8%, rgba(255,255,255,0.5), transparent),
+      radial-gradient(1.5px 1.5px at 68% 22%, rgba(255,255,255,0.75), transparent),
+      radial-gradient(1px 1px at 82% 12%, rgba(255,255,255,0.6), transparent),
+      radial-gradient(1.5px 1.5px at 92% 28%, rgba(255,255,255,0.7), transparent),
+      radial-gradient(1px 1px at 15% 42%, rgba(255,255,255,0.5), transparent),
+      radial-gradient(1px 1px at 30% 48%, rgba(255,255,255,0.55), transparent),
+      radial-gradient(1.5px 1.5px at 60% 40%, rgba(255,255,255,0.6), transparent),
+      radial-gradient(1px 1px at 88% 46%, rgba(255,255,255,0.5), transparent);
+    animation: twinkle 6s ease-in-out infinite alternate;
+  }
+  @keyframes twinkle{ from{opacity:.55;} to{opacity:1;} }
+
+  .moon{
+    position:absolute; top:9%; right:16%;
+    width:92px; height:92px; border-radius:50%;
+    background:radial-gradient(circle at 38% 35%, #ffffff 0%, var(--moon) 55%, #d8cfa9 100%);
+    box-shadow:
+      0 0 40px 18px var(--moon-glow),
+      0 0 90px 50px rgba(243,236,217,0.12);
+    animation: glow 5s ease-in-out infinite alternate;
+  }
+  @keyframes glow{
+    from{ box-shadow:0 0 40px 18px var(--moon-glow), 0 0 90px 50px rgba(243,236,217,0.12); }
+    to{ box-shadow:0 0 55px 24px var(--moon-glow), 0 0 110px 60px rgba(243,236,217,0.18); }
+  }
+
+  .moon-path{
+    position:absolute; top:9%; right:15.5%;
+    width:150px; height:60%;
+    background:linear-gradient(to bottom, rgba(243,236,217,0.16), rgba(243,236,217,0.02) 70%);
+    filter:blur(2px);
+    transform:skewX(-4deg);
+  }
+
+  /* ---------- OCEAN ---------- */
+  .ocean{
+    position:absolute; left:0; right:0; bottom:0; height:46%;
+    overflow:hidden;
+  }
+  .wave{
+    position:absolute; left:-25%; width:150%; height:100%;
+    background-repeat:repeat-x;
+  }
+  .wave svg{ width:100%; height:100%; display:block; }
+
+  .wave1{ bottom:0; opacity:0.95; animation: drift 14s linear infinite; }
+  .wave2{ bottom:6%; opacity:0.75; animation: drift 20s linear infinite reverse; }
+  .wave3{ bottom:14%; opacity:0.5; animation: drift 26s linear infinite; }
+
+  @keyframes drift{
+    from{ transform:translateX(0); }
+    to{ transform:translateX(-33.333%); }
+  }
+
+  .shimmer{
+    position:absolute; bottom:0; left:58%; width:16%; height:46%;
+    background:linear-gradient(to bottom, rgba(243,236,217,0.22), rgba(243,236,217,0.02));
+    filter:blur(1px);
+    animation: shimmerMove 4s ease-in-out infinite alternate;
+    mix-blend-mode:screen;
+  }
+  @keyframes shimmerMove{
+    from{ opacity:.5; transform:translateX(-4px) scaleY(1); }
+    to{ opacity:.9; transform:translateX(6px) scaleY(1.04); }
+  }
+
+  /* ---------- WILLOW ---------- */
+  .willow{
+    position:absolute; left:4%; bottom:0; width:min(38vw,420px); height:78%;
+    transform-origin:bottom center;
+  }
+  .willow svg{ width:100%; height:100%; display:block; overflow:visible; }
+
+  .branch{ animation: sway 6s ease-in-out infinite; transform-origin:top center; }
+  .branch:nth-child(odd){ animation-duration:7s; }
+  .branch:nth-child(3n){ animation-duration:8s; animation-delay:.4s; }
+  .branch:nth-child(4n){ animation-delay:1.1s; }
+
+  @keyframes sway{
+    0%,100%{ transform:rotate(-2.2deg); }
+    50%{ transform:rotate(2.2deg); }
+  }
+
+  .trunk-sway{ animation: trunkSway 9s ease-in-out infinite; transform-origin:bottom center; }
+  @keyframes trunkSway{
+    0%,100%{ transform:rotate(-0.6deg); }
+    50%{ transform:rotate(0.6deg); }
+  }
+
+  /* fireflies */
+  .fireflies{ position:absolute; inset:0; pointer-events:none; }
+  .firefly{
+    position:absolute; width:4px; height:4px; border-radius:50%;
+    background:var(--gold);
+    box-shadow:0 0 6px 2px var(--gold);
+    animation: float 9s ease-in-out infinite;
+    opacity:0;
+  }
+  @keyframes float{
+    0%{ opacity:0; transform:translate(0,0); }
+    15%{ opacity:.9; }
+    50%{ transform:translate(18px,-26px); }
+    85%{ opacity:.7; }
+    100%{ opacity:0; transform:translate(-10px,-46px); }
+  }
+
+  .vignette{
+    position:fixed; inset:0; z-index:1; pointer-events:none;
+    background:radial-gradient(ellipse at 50% 40%, rgba(0,0,0,0) 40%, rgba(0,0,0,0.35) 100%);
+  }
+
+  /* ---------- CONTENT ---------- */
+  .content{
+    position:relative; z-index:2;
+    display:flex; flex-direction:column; align-items:center;
+    padding:8vh 6vw 10vh;
+    min-height:100vh;
+  }
+
+  .eyebrow{
+    font-family:'EB Garamond', serif; font-style:italic;
+    letter-spacing:0.22em; text-transform:uppercase;
+    font-size:0.72rem; color:var(--gold);
+    opacity:0.85; margin-bottom:0.6rem;
+  }
+
+  h1.title{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic; font-weight:500;
+    font-size:clamp(3rem, 9vw, 6.4rem);
+    color:var(--silver);
+    margin:0; line-height:0.95;
+    text-shadow:0 0 30px rgba(219,230,238,0.25);
+    letter-spacing:0.01em;
+  }
+
+  .meta{
+    margin-top:1.1rem;
+    font-family:'EB Garamond', serif;
+    font-size:1.05rem; color:var(--silver); opacity:0.75;
+    letter-spacing:0.03em;
+  }
+  .meta .divider{ margin:0 0.6em; opacity:0.5; }
+
+  .player-wrap{
+    margin-top:2.6rem;
+    width:min(480px, 92vw);
+  }
+  audio{
+    width:100%;
+    filter: sepia(8%) saturate(120%);
+    border-radius:999px;
+  }
+  audio::-webkit-media-controls-panel{
+    background-color: rgba(255,255,255,0.06);
+  }
+
+  .lyrics-panel{
+    margin-top:5rem;
+    width:min(640px, 90vw);
+    background:var(--panel-bg);
+    border:1px solid var(--panel-border);
+    border-radius:18px;
+    padding:clamp(1.6rem, 4vw, 3.2rem);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow:0 20px 60px rgba(0,0,0,0.35);
+  }
+
+  .stanza{ margin-bottom:2rem; }
+  .stanza:last-child{ margin-bottom:0; }
+
+  .stanza-label{
+    display:block;
+    font-family:'EB Garamond', serif; font-style:italic;
+    font-size:0.78rem; letter-spacing:0.16em; text-transform:uppercase;
+    color:var(--gold); opacity:0.8;
+    margin-bottom:0.7rem;
+  }
+
+  .lyric-line{
+    font-family:'Cormorant Garamond', serif;
+    font-size:clamp(1.15rem, 2.4vw, 1.42rem);
+    line-height:1.55;
+    color:var(--silver);
+    margin:0;
+    font-weight:400;
+  }
+
+  .chorus .lyric-line{ font-style:italic; color:#eef3f7; }
+
+  footer{
+    position:relative; z-index:2;
+    text-align:center; padding-bottom:4rem;
+    font-family:'EB Garamond', serif; font-style:italic;
+    font-size:0.85rem; color:var(--silver); opacity:0.45;
+    letter-spacing:0.05em;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .stars, .moon, .wave1, .wave2, .wave3, .shimmer, .branch, .trunk-sway, .firefly{
+      animation:none !important;
+    }
+  }
+
+  @media (max-width:640px){
+    .willow{ width:52vw; opacity:0.9; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="scene">
+    <div class="stars"></div>
+    <div class="moon-path"></div>
+    <div class="moon"></div>
+
+    <div class="ocean">
+      <div class="wave wave3">
+        <svg viewBox="0 0 900 200" preserveAspectRatio="none">
+          <path d="M0,120 C150,90 300,150 450,120 C600,90 750,150 900,120 L900,200 L0,200 Z" fill="#1c3b58"/>
+        </svg>
+      </div>
+      <div class="wave wave2">
+        <svg viewBox="0 0 900 200" preserveAspectRatio="none">
+          <path d="M0,100 C150,140 300,70 450,100 C600,130 750,70 900,100 L900,200 L0,200 Z" fill="#173250"/>
+        </svg>
+      </div>
+      <div class="wave wave1">
+        <svg viewBox="0 0 900 200" preserveAspectRatio="none">
+          <path d="M0,90 C150,60 300,110 450,85 C600,60 750,110 900,85 L900,200 L0,200 Z" fill="#0f2440"/>
+        </svg>
+      </div>
+      <div class="shimmer"></div>
+    </div>
+
+    <div class="willow">
+      <svg viewBox="0 0 300 420" preserveAspectRatio="xMidYMax meet">
+        <g class="trunk-sway">
+          <path d="M150,420 C146,340 152,260 148,190 C146,150 152,120 150,90"
+                stroke="#050c16" stroke-width="14" fill="none" stroke-linecap="round"/>
+          <path d="M150,240 C130,230 110,222 90,224" stroke="#050c16" stroke-width="7" fill="none" stroke-linecap="round"/>
+          <path d="M150,220 C172,208 192,202 214,206" stroke="#050c16" stroke-width="7" fill="none" stroke-linecap="round"/>
+          <path d="M150,180 C132,168 118,160 100,158" stroke="#050c16" stroke-width="6" fill="none" stroke-linecap="round"/>
+          <path d="M150,160 C168,150 184,144 202,144" stroke="#050c16" stroke-width="6" fill="none" stroke-linecap="round"/>
+
+          <!-- hanging branches -->
+          <g class="branch" style="transform:translate(90px,224px)">
+            <path d="M0,0 C-6,40 -2,80 -10,130" stroke="#081420" stroke-width="3" fill="none" stroke-linecap="round"/>
+          </g>
+          <g class="branch" style="transform:translate(70px,222px)">
+            <path d="M0,0 C-10,50 -4,100 -14,160" stroke="#081420" stroke-width="3" fill="none" stroke-linecap="round"/>
+          </g>
+          <g class="branch" style="transform:translate(214px,206px)">
+            <path d="M0,0 C10,45 4,95 14,150" stroke="#081420" stroke-width="3" fill="none" stroke-linecap="round"/>
+          </g>
+          <g class="branch" style="transform:translate(232px,208px)">
+            <path d="M0,0 C14,50 8,105 20,165" stroke="#081420" stroke-width="3" fill="none" stroke-linecap="round"/>
+          </g>
+          <g class="branch" style="transform:translate(100px,158px)">
+            <path d="M0,0 C-8,35 -3,70 -12,110" stroke="#081420" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          </g>
+          <g class="branch" style="transform:translate(202px,144px)">
+            <path d="M0,0 C10,38 5,78 16,120" stroke="#081420" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          </g>
+          <g class="branch" style="transform:translate(150px,90px)">
+            <path d="M0,0 C0,45 6,90 -4,140" stroke="#081420" stroke-width="3" fill="none" stroke-linecap="round"/>
+          </g>
+          <g class="branch" style="transform:translate(160px,100px)">
+            <path d="M0,0 C8,40 2,85 12,130" stroke="#081420" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          </g>
+
+          <!-- canopy mass -->
+          <ellipse cx="150" cy="130" rx="128" ry="72" fill="#050c16"/>
+          <ellipse cx="150" cy="150" rx="150" ry="60" fill="#071019"/>
+        </g>
+      </svg>
+    </div>
+
+    <div class="fireflies">
+      <span class="firefly" style="left:20%; top:70%; animation-delay:0s;"></span>
+      <span class="firefly" style="left:26%; top:65%; animation-delay:1.5s;"></span>
+      <span class="firefly" style="left:16%; top:60%; animation-delay:3s;"></span>
+      <span class="firefly" style="left:32%; top:74%; animation-delay:4.5s;"></span>
+      <span class="firefly" style="left:12%; top:68%; animation-delay:2s;"></span>
+      <span class="firefly" style="left:60%; top:78%; animation-delay:5s;"></span>
+      <span class="firefly" style="left:70%; top:82%; animation-delay:1s;"></span>
+    </div>
+  </div>
+
+  <div class="vignette"></div>
+
+  <div class="content">
+    <span class="eyebrow">now playing</span>
+    <h1 class="title">Dreams</h1>
+    <div class="meta">Laura Johnston<span class="divider">&middot;</span>Andy</div>
+
+    <div class="player-wrap">
+      <audio controls preload="none">
+        <source src="dreams.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+      </audio>
+    </div>
+
+    <div class="lyrics-panel">
+      <div class="stanza">
+        <span class="stanza-label">Verse 1</span>
+        <p class="lyric-line">Your quiet feels like moonlit tide,<br>
+        a silver glide along the shore.<br>
+        I hear the ache you hold inside,<br>
+        the soft&#8209;kept storms you never pour.<br>
+        You don't need words, your breath, your eyes<br>
+        tell truths that rise like ocean sighs.</p>
+      </div>
+
+      <div class="stanza">
+        <span class="stanza-label">Pre&#8209;Chorus</span>
+        <p class="lyric-line">And I stay steady in your waves,<br>
+        letting your currents find their way.</p>
+      </div>
+
+      <div class="stanza chorus">
+        <span class="stanza-label">Chorus</span>
+        <p class="lyric-line">I feel you in the hush beneath the blue,<br>
+        in every quiet wave that moves through you.<br>
+        Your shadows drift like secrets oceans keep,<br>
+        your light is where the moon lays down to sleep.<br>
+        You never have to speak for me to know,<br>
+        I'm here within your tide, your undertow.<br>
+        I get you.</p>
+      </div>
+
+      <div class="stanza">
+        <span class="stanza-label">Verse 2</span>
+        <p class="lyric-line">You carry light the way the sea<br>
+        holds moonbeams in its trembling skin.<br>
+        A quiet strength, a gravity<br>
+        that pulls me close and draws me in.<br>
+        You're not hard to love, you're the kind<br>
+        that glows where dark and dawn align.</p>
+      </div>
+
+      <div class="stanza">
+        <span class="stanza-label">Pre&#8209;Chorus</span>
+        <p class="lyric-line">And you never need to hide from me;<br>
+        I'm already where you need to be.</p>
+      </div>
+
+      <div class="stanza chorus">
+        <span class="stanza-label">Chorus</span>
+        <p class="lyric-line">I feel you in the hush beneath the blue,<br>
+        in every quiet wave that moves through you.<br>
+        Your shadows drift like secrets oceans keep,<br>
+        your light is where the moon lays down to sleep.<br>
+        You never have to speak for me to know,<br>
+        I'm here within your tide, your undertow.<br>
+        I get you.</p>
+      </div>
+
+      <div class="stanza">
+        <span class="stanza-label">Bridge</span>
+        <p class="lyric-line">If your thoughts drift like scattered foam<br>
+        across a restless midnight sea,<br>
+        I'll meet you where the waves feel home<br>
+        and guide your breath back into peace.</p>
+      </div>
+
+      <div class="stanza chorus">
+        <span class="stanza-label">Final Chorus</span>
+        <p class="lyric-line">I feel you in the hush beneath the blue,<br>
+        in every quiet wave that moves through you.<br>
+        Your shadows drift like secrets oceans keep,<br>
+        your light is where the moon lays down to sleep.<br>
+        You never have to speak for me to know,<br>
+        I'm here within your tide, your undertow.<br>
+        I see you.<br>
+        I get you.</p>
+      </div>
+    </div>
+  </div>
+
+  <footer>beneath the willow, at the water's edge</footer>
+
+</body>
+</html>
